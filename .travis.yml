@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install: 
+  - docker build -t sirisrin/react-test -f Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true sirisrin/react-test npm test
+
+after_success: 
+  - docker build -t sirisrin/multi-client ./client
+  - docker build -t sirisrin/multi-server ./server
+  - docker build -t sirisrin/multi-worker ./worker
+  - docker build -t sirisrin/multi-nginx  ./nginx
